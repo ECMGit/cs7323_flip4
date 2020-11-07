@@ -296,6 +296,11 @@ class ViewController: UIViewController, URLSessionDelegate {
                     if let dsid = jsonDictionary["dsid"]{
                         self.dsid = dsid as! Int
                     }
+                    DispatchQueue.main.async{
+                        // update label when set
+                        self.DSIDTextField.text = String(self.dsid)
+                    }
+                    
                     print("current dsid: ", self.dsid)
                 }
                 

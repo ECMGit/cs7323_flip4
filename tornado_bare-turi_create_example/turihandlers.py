@@ -37,7 +37,7 @@ class UploadLabeledDatapointHandler(BaseHandler):
 
         dbid = self.db.labeledinstances.insert(
             {"feature":fvals,"label":label,"dsid":sess}
-            );
+            )
         self.write_json({"id":str(dbid),
             "feature":[str(len(fvals))+" Points Received",
                     "min of: " +str(min(fvals)),
@@ -73,6 +73,7 @@ class UpdateModelForDatasetId(BaseHandler):
             yhat = model.predict(data)
             self.clf[str(dsid)] = model
             acc = sum(yhat==data['target'])/float(len(data))
+            print("accuracy: ", acc)
             # save model for use later, if desired
             model.save('../models/turi_model_dsid%d'%(dsid))
             
@@ -109,14 +110,14 @@ class PredictOneFromDatasetId(BaseHandler):
             print('Loading Model From file')
             try:
                 self.clf[str(dsid)] = tc.load_model('../models/turi_model_dsid%d'%(dsid))
-                predLabel = self.clf[str(dsid)].predict(fvals);
+                predLabel = self.clf[str(dsid)].predict(fvals)
                 self.write_json({"prediction":str(predLabel)})  
             except IOError:
                 print("model does not exist")
                 self.write_json({"prediction":str(0)})
 
         else:
-            predLabel = self.clf[str(dsid)].predict(fvals);
+            predLabel = self.clf[str(dsid)].predict(fvals)
             self.write_json({"prediction":str(predLabel)})
 
     def get_features_as_SFrame(self, vals):
